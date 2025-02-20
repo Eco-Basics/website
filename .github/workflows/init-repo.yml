@@ -1,0 +1,25 @@
+name: Initialize Repository
+
+on:
+  workflow_dispatch:
+
+jobs:
+  init-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+
+      - name: Push to Eco-Basics Repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote add eco-basics https://github.com/Eco-Basics/website.git
+          git push -u eco-basics main || git push -u eco-basics main --force 

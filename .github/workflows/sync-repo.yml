@@ -1,0 +1,56 @@
+name: Sync Repository
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+
+      - name: Create and verify files
+        run: |
+          # Ensure directory structure exists
+          mkdir -p .github/workflows
+
+          # Create necessary files if they don't exist
+          echo "Creating/Verifying files..."
+          
+          # Copy files to ensure they exist
+          cp index.html index.html || echo "index.html not found"
+          cp styles.css styles.css || echo "styles.css not found"
+          cp vercel.json vercel.json || echo "vercel.json not found"
+
+          echo "Files in current directory:"
+          ls -la
+
+      - name: Push to Eco-Basics repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Initialize if needed
+          git init || true
+          
+          # Add the remote repository
+          git remote add origin https://github.com/Eco-Basics/website.git || git remote set-url origin https://github.com/Eco-Basics/website.git
+          
+          # Add all files
+          git add .
+          
+          # Commit changes
+          git commit -m "Initial commit: Add website files" || echo "No changes to commit"
+          
+          # Force push to ensure files are uploaded
+          git push -f https://${{ secrets.GITHUB_TOKEN }}@github.com/Eco-Basics/website.git HEAD:main 
