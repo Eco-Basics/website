@@ -79,21 +79,22 @@
         .header {
             display: flex;
             justify-content: space-between;
-            padding: 15px;
+            padding: 15px 30px;
             align-items: center;
             position: fixed;
             top: 2px;
             left: 0;
             right: 0;
-            background: transparent;
+            background: var(--background);
             z-index: 1000;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border);
         }
 
         .header.visible {
             opacity: 1;
             pointer-events: all;
+            backdrop-filter: blur(10px);
         }
 
         .header:not(.visible) {
@@ -103,7 +104,30 @@
         .logo {
             font-weight: bold;
             font-size: clamp(18px, 4vw, 24px);
-            color: var(--text-color);
+            color: var(--foreground);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-button {
+            padding: 8px 16px;
+            background-color: var(--secondary);
+            color: var(--foreground);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .nav-button:hover {
+            background-color: var(--border);
         }
 
         .main-content {
@@ -683,73 +707,152 @@
             overflow: auto; /* Enable scrolling after load */
         }
 
-        .footer {
-            background: transparent;
-            color: var(--card-foreground);
-            padding: 40px 20px;
-            margin-top: auto;
+        .section-heading {
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--foreground);
+        }
+
+        .section-heading h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(to right, var(--primary-foreground), var(--muted-foreground));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Testimonials Section Styles */
+        #section3 {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .testimonials-container {
             width: 100%;
-            box-sizing: border-box;
+            height: calc(100vh - 200px); /* Reserve space for header and footer */
+            overflow: hidden;
+            position: relative;
+            background: var(--background);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .testimonial-row {
+            display: flex;
+            gap: 1.25rem;
+            padding: 0.5rem;
+            width: max-content;
+            will-change: transform;
+            animation: scroll 30s linear infinite;
+        }
+
+        .testimonial-card {
+            flex: 0 0 392px;
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            background: linear-gradient(145deg, var(--secondary) 0%, var(--accent) 100%);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            margin: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-row:hover {
+            animation-play-state: paused;
+        }
+
+        .testimonial-row.reverse {
+            animation-direction: reverse;
+            animation-delay: -15s;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid var(--border);
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--foreground);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-username {
+            color: var(--muted-foreground);
+            font-size: 0.85rem;
+        }
+
+        .testimonial-body {
+            color: var(--foreground);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            padding: 0.25rem 0;
+        }
+
+        .footer {
+            padding: 1.5rem 0;
+            background: var(--background);
+            border-top: 1px solid var(--border);
+            margin-top: auto;
         }
 
         .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-bottom: 20px;
-        }
-
-        .footer-section h4 {
-            margin: 0 0 15px;
-            font-size: 1.1rem;
-        }
-
-        .footer-section p {
-            margin: 5px 0;
-            color: var(--muted-foreground);
-        }
-
-        .social-links {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
         }
 
-        .social-links a {
+        .footer-section {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-text {
+            color: var(--muted-foreground);
+            font-size: 0.9rem;
+        }
+
+        .footer-link {
             color: var(--muted-foreground);
             text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
         }
 
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-        }
-
-        /* Add scroll progress bar styles */
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            z-index: 1000;
-        }
-
-        .scroll-progress-bar {
-            height: 100%;
-            background: var(--foreground);
-            width: 0%;
-            transition: width 0.1s ease-out;
-        }
-
-        /* Special styling for section 3 */
-        #section3 {
-            min-height: 100vh;
-            padding-bottom: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
+        .footer-link:hover {
+            color: var(--foreground);
         }
 
         /* Text Animation Styles */
@@ -915,6 +1018,53 @@
         .main-content {
             z-index: 10;
             position: relative;
+        }
+
+        /* Add scroll progress bar styles */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .scroll-progress-bar {
+            height: 100%;
+            background: var(--foreground);
+            width: 0%;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Special styling for section 3 */
+        #section3 {
+            min-height: 100vh;
+            padding-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .gradient-overlay {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 15%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        .gradient-overlay.left {
+            left: 0;
+            background: linear-gradient(to right, var(--background) 0%, transparent 100%);
+        }
+
+        .gradient-overlay.right {
+            right: 0;
+            background: linear-gradient(to left, var(--background) 0%, transparent 100%);
         }
     </style>
 
@@ -1116,7 +1266,10 @@
     </div>
 
     <header class="header">
-        <div class="logo">ECOBASICS</div>
+        <a href="index.html" class="logo">EcoBasics</a>
+        <div class="nav-links">
+            <a href="whitepaper.html" class="nav-button">Whitepapers</a>
+        </div>
     </header>
 
     <main>
@@ -1150,82 +1303,228 @@
         </section>
 
         <section id="section3" class="section">
-            <div class="analytics-container">
-                <div class="analytics-card">
-                    <div class="analytics-card-content">
-                        <div class="card-header">
-                            <h3 class="card-title">Monthly Traffic</h3>
-                            <p class="card-description">January - June 2024</p>
-                        </div>
-                        <div class="card-content">
-                            <canvas id="barChart"></canvas>
-                        </div>
-                        <div class="card-footer">
-                            <div class="trending-up">
-                                <span>↑</span>
-                                <span>Trending up by 5.2% this month</span>
+            <div class="section-heading">
+                <h2>Join our waitlist</h2>
+            </div>
+            <div class="testimonials-container">
+                <div class="testimonial-row">
+                    <!-- First set -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Sarah Chen</div>
+                                <div class="testimonial-username">@sustainablesarah</div>
                             </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "Excited to see EcoBasics revolutionizing sustainable living. The future looks greener already!"
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Marcus Rodriguez</div>
+                                <div class="testimonial-username">@ecofuturist</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "Can't wait to see how EcoBasics transforms our approach to environmental consciousness."
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Emma Watson</div>
+                                <div class="testimonial-username">@greentech</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "The anticipation builds as EcoBasics prepares to launch. This is exactly what we need!"
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">David Park</div>
+                                <div class="testimonial-username">@ecowarrior</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "Looking forward to seeing how EcoBasics will make sustainable living more accessible."
+                        </div>
+                    </div>
+                    <!-- Duplicate set for seamless loop -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Sarah Chen</div>
+                                <div class="testimonial-username">@sustainablesarah</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "Excited to see EcoBasics revolutionizing sustainable living. The future looks greener already!"
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Marcus Rodriguez</div>
+                                <div class="testimonial-username">@ecofuturist</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "Can't wait to see how EcoBasics transforms our approach to environmental consciousness."
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Emma Watson</div>
+                                <div class="testimonial-username">@greentech</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "The anticipation builds as EcoBasics prepares to launch. This is exactly what we need!"
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">David Park</div>
+                                <div class="testimonial-username">@ecowarrior</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "Looking forward to seeing how EcoBasics will make sustainable living more accessible."
                         </div>
                     </div>
                 </div>
-
-                <div class="analytics-card">
-                    <div class="analytics-card-content">
-                        <div class="card-header">
-                            <h3 class="card-title">Browser Usage</h3>
-                            <p class="card-description">January - June 2024</p>
-                        </div>
-                        <div class="card-content">
-                        </div>
-                        <div class="card-footer">
-                            <div class="trending-up">
-                                <span>↑</span>
-                                <span>1,125 Total Visitors</span>
+                <div class="testimonial-row reverse">
+                    <!-- First set -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Aisha Patel</div>
+                                <div class="testimonial-username">@sustainablefuture</div>
                             </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "The preview of EcoBasics has me thrilled about the possibilities for sustainable innovation!"
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Tom Anderson</div>
+                                <div class="testimonial-username">@ecoinnovator</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "EcoBasics is shaping up to be a game-changer in environmental sustainability."
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">James Lee</div>
+                                <div class="testimonial-username">@greenbuilder</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "Finally, a platform that promises to make eco-friendly choices simple and accessible."
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Maya Singh</div>
+                                <div class="testimonial-username">@ecoenthusiast</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "The potential impact of EcoBasics on sustainable living is truly inspiring."
+                        </div>
+                    </div>
+                    <!-- Duplicate set for seamless loop -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Aisha Patel</div>
+                                <div class="testimonial-username">@sustainablefuture</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "The preview of EcoBasics has me thrilled about the possibilities for sustainable innovation!"
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Tom Anderson</div>
+                                <div class="testimonial-username">@ecoinnovator</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "EcoBasics is shaping up to be a game-changer in environmental sustainability."
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">James Lee</div>
+                                <div class="testimonial-username">@greenbuilder</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "Finally, a platform that promises to make eco-friendly choices simple and accessible."
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar"></div>
+                            <div class="testimonial-author">
+                                <div class="testimonial-name">Maya Singh</div>
+                                <div class="testimonial-username">@ecoenthusiast</div>
+                            </div>
+                        </div>
+                        <div class="testimonial-body">
+                            "The potential impact of EcoBasics on sustainable living is truly inspiring."
                         </div>
                     </div>
                 </div>
-
-                <div class="analytics-card">
-                    <div class="analytics-card-content">
-                        <div class="card-header">
-                            <h3 class="card-title">Traffic Sources</h3>
-                            <p class="card-description">January - June 2024</p>
-                        </div>
-                        <div class="card-content">
-                            <canvas id="areaChart"></canvas>
-                        </div>
-                        <div class="card-footer">
-                            <div class="trending-up">
-                                <span>↑</span>
-                                <span>5.2% increase in traffic</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="gradient-overlay left"></div>
+                <div class="gradient-overlay right"></div>
             </div>
             <footer class="footer">
                 <div class="footer-content">
                     <div class="footer-section">
-                        <h4>About Us</h4>
-                        <p>EcoBasics - Making sustainability accessible</p>
+                        <span class="footer-text">EcoBasics - Making sustainability accessible</span>
                     </div>
                     <div class="footer-section">
-                        <h4>Contact</h4>
-                        <p>Email: info@ecobasics.com</p>
-                        <p>Phone: (555) 123-4567</p>
+                        <a href="#" class="footer-link">About Us</a>
+                        <a href="#" class="footer-link">Contact</a>
+                        <a href="#" class="footer-link">Follow Us</a>
                     </div>
                     <div class="footer-section">
-                        <h4>Follow Us</h4>
-                        <div class="social-links">
-                            <a href="#">Twitter</a>
-                            <a href="#">LinkedIn</a>
-                            <a href="#">Instagram</a>
-                        </div>
+                        <a href="#" class="footer-link">Twitter</a>
+                        <a href="#" class="footer-link">LinkedIn</a>
+                        <a href="#" class="footer-link">Instagram</a>
                     </div>
-                </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2024 EcoBasics. All rights reserved.</p>
                 </div>
             </footer>
         </section>
@@ -1419,5 +1718,51 @@
             }, 4000);
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Debug logging for carousel dimensions
+            const row = document.querySelector('.testimonial-row');
+            const cards = row.querySelectorAll('.testimonial-card');
+            const containerWidth = document.querySelector('.testimonials-container').offsetWidth;
+            
+            // Calculate total width of cards including gaps
+            const cardWidth = cards[0].offsetWidth;
+            const gap = parseFloat(getComputedStyle(row).gap);
+            const totalCardsWidth = (cardWidth + gap) * cards.length;
+            
+            console.log('Carousel Debug Info:');
+            console.log('Container width:', containerWidth);
+            console.log('Single card width:', cardWidth);
+            console.log('Gap between cards:', gap);
+            console.log('Total cards in row:', cards.length);
+            console.log('Total width of cards + gaps:', totalCardsWidth);
+            console.log('Current animation distance:', containerWidth * 0.5);
+            console.log('Required duplicates for seamless loop:', Math.ceil(containerWidth / (cardWidth + gap)));
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('.testimonial-row');
+            
+            rows.forEach(row => {
+                // Clone enough cards to ensure smooth scrolling
+                const cards = row.querySelectorAll('.testimonial-card');
+                const cardWidth = cards[0].offsetWidth;
+                const rowWidth = row.offsetWidth;
+                const containerWidth = row.parentElement.offsetWidth;
+                const cardsNeeded = Math.ceil((containerWidth * 2) / cardWidth);
+                
+                // Clone additional cards if needed
+                while (row.children.length < cardsNeeded) {
+                    cards.forEach(card => {
+                        const clone = card.cloneNode(true);
+                        row.appendChild(clone);
+                    });
+                }
+            });
+        });
+    </script>
 </body>
-</html> 
+</html>
