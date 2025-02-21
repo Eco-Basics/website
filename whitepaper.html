@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EcoBasics - Research Papers</title>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <style>
+        :root {
+            --background: hsl(0, 0%, 100%);
+            --foreground: hsl(240, 10%, 3.9%);
+            --primary: hsl(240, 5.9%, 10%);
+            --primary-foreground: hsl(0, 0%, 98%);
+            --secondary: hsl(240, 4.8%, 95.9%);
+            --border: hsl(240, 5.9%, 90%);
+            --radius: 0.5rem;
+            --accent: #4CAF50;
+        }
+
+        [data-theme="dark"] {
+            --background: #121212;
+            --foreground: #ffffff;
+            --primary: hsl(0, 0%, 98%);
+            --primary-foreground: hsl(240, 5.9%, 10%);
+            --secondary: #2d2d2d;
+            --border: #2d2d2d;
+            --accent: #66BB6A;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--background);
+            border-bottom: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .back-button {
+            padding: 0.5rem 1rem;
+            background-color: var(--secondary);
+            color: var(--foreground);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 2rem;
+        }
+
+        .paper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .paper-card {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .paper-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent);
+        }
+
+        .paper-image-container {
+            overflow: hidden;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+
+        .paper-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .paper-card:hover .paper-image {
+            transform: scale(1.05);
+        }
+
+        .paper-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .paper-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 0.75rem;
+            color: var(--foreground);
+            line-height: 1.4;
+        }
+
+        .paper-description {
+            color: var(--foreground);
+            opacity: 0.8;
+            margin: 0 0 1.5rem;
+            flex: 1;
+            line-height: 1.6;
+        }
+
+        .read-button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--secondary);
+            color: var(--foreground);
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            align-self: flex-start;
+        }
+
+        .read-button:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            background: var(--background);
+            border-radius: var(--radius);
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-content {
+            padding: 2.5rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.75rem;
+            line-height: 1.3;
+        }
+
+        .modal-body {
+            padding: 0 2.5rem;
+        }
+
+        .modal-body p {
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: var(--foreground);
+            opacity: 0.9;
+        }
+
+        .modal-footer {
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .source-button {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .source-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            place-items: center;
+            z-index: 1000;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--foreground);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .modal.show {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .paper-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="back-button">← Back to Home</a>
+    </nav>
+
+    <div class="container">
+        <h1>Research Papers</h1>
+        <div class="paper-grid" id="paperGrid"></div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-content" id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Check system preference for dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        const papers = [
+            {
+                title: "The Impact of Sustainable Living on Urban Environments",
+                description: "A comprehensive study on sustainable urban development",
+                image: "https://images.unsplash.com/photo-1518005068251-37900150dfca?w=800",
+                content: `<p>This research paper explores the profound impact of sustainable living practices on urban environments. Through extensive data analysis and case studies, we demonstrate how small changes in individual behavior can lead to significant environmental improvements.</p>
+                         <p>Key findings include:</p>
+                         <ul>
+                            <li>Urban communities adopting sustainable practices show 30% reduction in carbon emissions</li>
+                            <li>Implementation of green spaces increases community well-being by 45%</li>
+                            <li>Sustainable transportation initiatives reduce traffic congestion by up to 25%</li>
+                         </ul>
+                         <p>The study provides actionable recommendations for city planners and policymakers to create more sustainable urban environments.</p>`,
+                sourceUrl: "https://example.com/paper1"
+            },
+            {
+                title: "Renewable Energy Integration in Modern Cities",
+                description: "Analysis of renewable energy adoption in urban areas",
+                image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800",
+                content: `<p>This study examines the challenges and opportunities in integrating renewable energy sources into modern urban infrastructure. We present innovative solutions and policy recommendations for accelerating the transition to clean energy.</p>
+                         <p>Key insights:</p>
+                         <ul>
+                            <li>Solar panel integration can meet up to 60% of urban energy needs</li>
+                            <li>Smart grid implementation improves energy efficiency by 40%</li>
+                            <li>Community-based renewable projects show 85% public support</li>
+                         </ul>
+                         <p>The research provides a framework for cities to achieve their renewable energy goals while maintaining grid stability.</p>`,
+                sourceUrl: "https://example.com/paper2"
+            },
+            {
+                title: "Zero-Waste Living: A Practical Guide",
+                description: "Research on implementing zero-waste practices",
+                image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800",
+                content: `<p>This paper provides a detailed analysis of zero-waste living practices and their environmental impact. Through case studies and empirical research, we demonstrate the feasibility and benefits of adopting a zero-waste lifestyle.</p>
+                         <p>Major findings:</p>
+                         <ul>
+                            <li>Household waste reduction of up to 90% achievable within 6 months</li>
+                            <li>Cost savings of 25-40% on household consumables</li>
+                            <li>Significant reduction in plastic pollution through simple lifestyle changes</li>
+                         </ul>
+                         <p>The research includes practical guidelines and recommendations for individuals and communities to transition to zero-waste living.</p>`,
+                sourceUrl: "https://example.com/paper3"
+            }
+        ];
+
+        function createPaperCards() {
+            const grid = document.getElementById('paperGrid');
+            papers.forEach((paper, index) => {
+                const card = document.createElement('div');
+                card.className = 'paper-card';
+                card.innerHTML = `
+                    <div class="paper-image-container">
+                        <img src="${paper.image}" alt="${paper.title}" class="paper-image">
+                    </div>
+                    <div class="paper-content">
+                        <h3 class="paper-title">${paper.title}</h3>
+                        <p class="paper-description">${paper.description}</p>
+                        <button class="read-button" onclick="showPaper(${index})">Read</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function showPaper(index) {
+            const paper = papers[index];
+            const modal = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+            
+            content.innerHTML = `
+                <div class="modal-header">
+                    <h2>${paper.title}</h2>
+                    <button class="close-button" onclick="closeModal()">✕</button>
+                </div>
+                <div class="modal-body">
+                    ${paper.content}
+                </div>
+                <div class="modal-footer">
+                    <a href="${paper.sourceUrl}" class="source-button" target="_blank">Take me to source</a>
+                </div>
+            `;
+            
+            modal.style.display = 'grid';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Add animation class after a brief delay
+            setTimeout(() => {
+                document.querySelector('.modal').classList.add('show');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modalOverlay');
+            document.querySelector('.modal').classList.remove('show');
+            
+            // Wait for animation to complete
+            setTimeout(() => {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        createPaperCards();
+
+        // Listen for theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        });
+    </script>
+</body>
+</html>
